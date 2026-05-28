@@ -1,0 +1,442 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f7f7f7;
+    overflow: hidden;
+}
+
+.page-wrapper {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar-nav {
+    width: 60px;
+    background-color: #222;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 10px;
+    gap: 10px;
+}
+.sidebar-nav button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    transition: transform 0.2s;
+}
+.sidebar-nav button:hover { transform: scale(1.1); }
+
+.content-wrapper {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 50px);
+}
+
+.left-panel {
+    width: 380px;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-sizing: border-box;
+}
+
+.cover-container {
+    width: 100%;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f2f2f2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cover-container img { width: 100%; height: 100%; object-fit: cover; }
+.cover-placeholder { color: #777; font-size: 14px; }
+
+.file-input { display: none; }
+.file-button {
+    display: block;
+    text-align: center;
+    padding: 6px;
+    border-radius: 6px;
+    background: #eee;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.track-header { display: flex; gap: 10px; align-items: center; }
+.release-title-input {
+    flex: 1;
+    font-size: 1.3rem;
+    border: none;
+    border-bottom: 2px solid #ccc;
+    background: transparent;
+    padding-bottom: 4px;
+    outline: none;
+}
+.delete-btn {
+    width: 30px; height: 30px;
+    border: none; border-radius: 5px;
+    background: rgba(0,0,0,0.6); color: #fff;
+    cursor: pointer;
+}
+
+.title-feedback { font-size: 13px; color: #888; display: none; }
+
+#typeSelect {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+#artistsSelect {
+    width: 100%;
+    min-height: 80px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 6px;
+    font-size: 14px;
+}
+
+#descriptionInput {
+    width: 100%;
+    min-height: 200px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: vertical;
+    font-size: 14px;
+    line-height: 1.6;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    background: #fafafa;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+#descriptionInput:focus {
+    outline: none;
+    border-color: #888;
+    background: #fff;
+}
+
+.right-panel {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.tracklist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+.tracklist-header h3 { margin: 0; }
+
+.add-track-btn {
+    padding: 6px 14px;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.track-search-panel {
+    background: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #eee;
+}
+.track-search-panel input {
+    width: 100%;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
+.track-search-results {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 8px;
+}
+.track-search-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+.track-search-item:hover { background: #f0f0f0; }
+.track-search-item .track-name { flex: 1; font-size: 14px; }
+.track-search-item .track-artist { font-size: 12px; color: #888; }
+.cancel-btn {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    background: #eee;
+    cursor: pointer;
+}
+
+.tracklist { display: flex; flex-direction: column; gap: 6px; }
+
+.track-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    padding: 10px 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+.track-row .pos { color: #aaa; font-size: 14px; width: 20px; text-align: center; }
+.track-row .info { flex: 1; min-width: 0; }
+.track-row .info .name { font-size: 14px; font-weight: 600; }
+.track-row .info .artist { font-size: 12px; color: #888; }
+.track-row audio { width: 160px; height: 28px; }
+.track-row .move-btns { display: flex; gap: 4px; }
+.track-row .move-btns button {
+    width: 24px; height: 24px;
+    border: none; border-radius: 4px;
+    background: #eee; cursor: pointer;
+    font-size: 14px;
+}
+.track-row .remove-track-btn {
+    background: none; border: none;
+    color: #e74c3c; cursor: pointer;
+    font-size: 16px;
+}
+
+.track-row audio {
+    width: 200px;
+    height: 32px;
+    flex-shrink: 0;
+}
+
+.attachments-drawer {
+    position: fixed;
+    bottom: 0;
+    left: 60px;
+    right: 0;
+    z-index: 50;
+    background: #fff;
+    border-top: 2px solid #ddd;
+    transition: height 0.3s;
+    height: 48px; /* закрытая шторка */
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.attachments-handle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    cursor: ns-resize;
+    user-select: none;
+    background: #f5f5f5;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.attachments-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-start;
+    align-content: flex-start;
+}
+
+.attachments-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.attachment-card {
+    position: relative;
+    background: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    flex-shrink: 0;
+}
+
+.attachment-card .remove-attach {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 22px;
+    height: 22px;
+    background: rgba(0,0,0,0.6);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 2;
+}
+
+.attachment-card img {
+    display: block;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.attachment-card audio {
+    width: 250px;
+    margin: 12px;
+}
+
+.attachment-card .text-preview {
+    width: 300px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    background: white;
+    white-space: pre-wrap;
+}
+
+.attachment-card .generic-file {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    text-decoration: none;
+    color: #444;
+    font-size: 14px;
+    text-align: center;
+    gap: 6px;
+}
+
+.generic-file .file-icon {
+    font-size: 36px;
+}
+
+.add-attachment-btn {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #eee;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    height: fit-content;
+}
+.selected-artists {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.selected-artist-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #e8e8e8;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 13px;
+}
+
+.selected-artist-chip .remove-artist {
+    cursor: pointer;
+    color: #999;
+    font-size: 14px;
+}
+
+.selected-artist-chip .remove-artist:hover {
+    color: #e74c3c;
+}
+
+.artist-search {
+    position: relative;
+}
+
+#artistSearchInput {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.artist-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 20;
+}
+
+.artist-dropdown-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.artist-dropdown-item:hover {
+    background: #f0f0f0;
+}
+
+.artist-dropdown-item.selected {
+    background: #e8e8e8;
+    color: #999;
+}
+
+#status {
+    position: fixed;
+    top: 20px; right: 20px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    display: none;
+    z-index: 100;
+}
+
+.track-row { cursor: grab; }
+.track-row.dragging { opacity: 0.5; }
+.track-row.drag-over { border: 2px dashed #3498db; background: #f0f8ff; }
+
+.drag-handle {
+    color: #ccc;
+    font-size: 18px;
+    cursor: grab;
+    user-select: none;
+    letter-spacing: 2px;
+}
+#status.success { background-color: #d4edda; color: #155724; display: block; }
+#status.error { background-color: #f8d7da; color: #721c24; display: block; }

@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.home-wrapper {
+    text-align: center;
+}
+
+.home-title {
+    font-size: 28px;
+    font-weight: 600;
+    color: #111;
+    margin: 0 0 4px 0;
+}
+
+.home-subtitle {
+    font-size: 14px;
+    color: #999;
+    margin: 0 0 48px 0;
+}
+
+.home-grid {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.home-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #111;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.home-card:hover {
+    transform: scale(1.08);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.14);
+}
+
+.home-icon {
+    font-size: 36px;
+    margin-bottom: 8px;
+}
+
+.home-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #555;
+}
+
+.home-logout {
+    margin-top: 48px;
+}
+
+.logout-link {
+    background: none;
+    border: none;
+    color: #aaa;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.logout-link:hover {
+    color: #666;
+}

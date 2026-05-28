@@ -1,0 +1,258 @@
+### ============================================
+### ПЕРЕМЕННЫЕ
+### ============================================
+@baseUrl = http://localhost:8080
+@username = composer
+@password = 123456
+
+### ============================================
+### 1. РЕГИСТРАЦИЯ
+### ============================================
+
+POST {{baseUrl}}/api/http/register
+Content-Type: application/json
+
+{
+    "username": "{{username}}",
+    "password": "{{password}}"
+}
+
+### ============================================
+### 2. ЛОГИН
+### ============================================
+
+# @name login
+POST {{baseUrl}}/api/http/login
+Content-Type: application/json
+
+{
+    "username": "{{username}}",
+    "password": "{{password}}"
+}
+
+> {%
+    client.global.set("accountId", response.body.accountId);
+%}
+
+### ============================================
+### 3. ТРЕКИ
+### ============================================
+
+### Создать трек
+# @name createTrack
+POST {{baseUrl}}/api/tracks
+X-Account-Id: {{accountId}}
+
+> {%
+    client.global.set("trackId", response.body.id);
+%}
+
+### Получить все треки
+GET {{baseUrl}}/api/tracks
+X-Account-Id: {{accountId}}
+
+### Получить трек по ID
+GET {{baseUrl}}/api/tracks/{{trackId}}
+X-Account-Id: {{accountId}}
+
+### Обновить трек
+PUT {{baseUrl}}/api/tracks/{{trackId}}
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+  "title": "Моя песня",
+  "description": "Черновик",
+  "lyrics": "Куплет...\nПрипев..."
+}
+
+### Поиск треков
+POST {{baseUrl}}/api/tracks/filter
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+  "search": "песня",
+  "sortBy": "title",
+  "sortDirection": "asc"
+}
+
+### ============================================
+### 4. ИСПОЛНИТЕЛИ
+### ============================================
+
+### Создать исполнителя
+# @name createArtist
+POST {{baseUrl}}/api/artists
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+  "name": "The Test Band",
+  "description": "Экспериментальная группа"
+}
+
+> {%
+    client.global.set("artistId", response.body.id);
+%}
+
+### Получить всех исполнителей
+GET {{baseUrl}}/api/artists
+X-Account-Id: {{accountId}}
+
+### Получить исполнителя по ID
+GET {{baseUrl}}/api/artists/{{artistId}}
+X-Account-Id: {{accountId}}
+
+### Обновить исполнителя
+PUT {{baseUrl}}/api/artists/{{artistId}}
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+  "name": "The Test Band (Updated)",
+  "description": "Обновлённое описание"
+}
+
+### ============================================
+### 5. РЕЛИЗЫ
+### ============================================
+
+### Создать релиз
+# @name createRelease
+POST {{baseUrl}}/api/releases
+X-Account-Id: {{accountId}}
+
+> {%
+    client.global.set("releaseId", response.body.id);
+%}
+
+### Получить все релизы
+GET {{baseUrl}}/api/releases
+X-Account-Id: {{accountId}}
+
+### Получить релиз по ID
+GET {{baseUrl}}/api/releases/{{releaseId}}
+X-Account-Id: {{accountId}}
+
+### Обновить релиз
+PUT {{baseUrl}}/api/releases/{{releaseId}}
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+  "title": "Мой альбом",
+  "description": "Описание альбома",
+  "type": "ALBUM"
+}
+
+### Прикрепить исполнителей к релизу
+PUT {{baseUrl}}/api/releases/{{releaseId}}/artists
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+    "artistIds": ["{{artistId}}"]
+}
+
+### Добавить трек в релиз
+POST {{baseUrl}}/api/releases/{{releaseId}}/tracks/{{trackId}}
+X-Account-Id: {{accountId}}
+
+### Треки не в релизе
+GET {{baseUrl}}/api/tracks/not-in-release/{{releaseId}}
+X-Account-Id: {{accountId}}
+
+### Поиск релизов
+POST {{baseUrl}}/api/releases/filter
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+  "types": ["ALBUM"],
+  "sortBy": "title",
+  "sortDirection": "asc"
+}
+
+### ============================================
+### 6. DISCOGS API
+### ============================================
+
+### Проверить название трека
+GET {{baseUrl}}/api/discogs/check-track?title=Yesterday
+X-Account-Id: {{accountId}}
+
+### Проверить название релиза
+GET {{baseUrl}}/api/discogs/check-release?title=Abbey Road
+X-Account-Id: {{accountId}}
+
+### Проверить имя артиста
+GET {{baseUrl}}/api/discogs/check-artist?name=Radiohead
+X-Account-Id: {{accountId}}
+
+### ============================================
+### 7. РИФМЫ
+### ============================================
+
+GET {{baseUrl}}/api/rhymes?word=love
+X-Account-Id: {{accountId}}
+
+### ============================================
+### 8. АККАУНТ
+### ============================================
+
+GET {{baseUrl}}/api/account
+X-Account-Id: {{accountId}}
+
+PUT {{baseUrl}}/api/account/username
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+    "newUsername": "newlogin"
+}
+
+PUT {{baseUrl}}/api/account/password
+X-Account-Id: {{accountId}}
+Content-Type: application/json
+
+{
+    "oldPassword": "{{password}}",
+    "newPassword": "newpass123"
+}
+
+### ============================================
+### 9. ТЕСТЫ ИСКЛЮЧЕНИЙ
+### ============================================
+
+### 404 — несуществующий трек
+GET {{baseUrl}}/api/tracks/00000000-0000-0000-0000-000000000000
+X-Account-Id: {{accountId}}
+
+### 400 — повторная регистрация
+POST {{baseUrl}}/api/http/register
+Content-Type: application/json
+
+{
+    "username": "{{username}}",
+    "password": "{{password}}"
+}
+
+### ============================================
+### 10. ОЧИСТКА
+### ============================================
+
+DELETE {{baseUrl}}/api/releases/{{releaseId}}/tracks/{{trackId}}
+X-Account-Id: {{accountId}}
+
+DELETE {{baseUrl}}/api/releases/{{releaseId}}
+X-Account-Id: {{accountId}}
+
+DELETE {{baseUrl}}/api/tracks/{{trackId}}
+X-Account-Id: {{accountId}}
+
+DELETE {{baseUrl}}/api/artists/{{artistId}}
+X-Account-Id: {{accountId}}
+
+DELETE {{baseUrl}}/api/account
+X-Account-Id: {{accountId}}
